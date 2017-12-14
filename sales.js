@@ -51,8 +51,33 @@ var seaTacStore = {
   custMaxHR: 24,
   cookiesPerHour: [],
   custPerHour: [],
-  customers: function (custMin, custMax) {
-    return Math.random() * (this.custMax - this.custMin) + this.custMin;
+  custPerHourFunc: function(){
+    for(var i = 0; i < hoursStore.length; i++){
+      this.custPerHour.push(random(this.custMinHr, this.custMaxHr));
+    }
+  },
+  cookiesPerHourFunc: function(){
+    this.custPerHourFunc();
+    for(var i = 0; i < hoursStore.length; i++){
+      var oneHour = Math.ceil(this.custPerHour[i] * this.cookiesPerCust);
+      this.cookiesPerHour.push(oneHour);
+      this.totalSales += oneHour;
+    }
+  },
+  render: function(){
+    this.cookiesPerHourFunc();
+    var ulEl = document.getElementById('pike');
+    for(var i = 0; i < hoursStore.length; i++){
+
+      var liEl = document.createElement('li');
+
+      liEl.textContent = hoursStore[i] + ': ' + this.cookiesPerHour[i] + ' cookies';
+
+      ulEl.appendChild(liEl);
+    }
+    liEl = document.createElement('li');
+    liEl.textContent = 'Total: ' + this.totalSales + ' cookies';
+    ulEl.appendChild(liEl);
   }
 };
 
